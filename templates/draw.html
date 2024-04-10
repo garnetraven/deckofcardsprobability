@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Drawn Cards</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/draw.css') }}"
+    />
+  </head>
+  <body>
+    <h1>Drawn Cards Information</h1>
+    <div class="card-container">
+      <div class="card-list">
+        {% for card_info in drawn_cards_info %}
+        <div class="card-title{% if card_info['active'] %} active{% endif %}">
+          <h2>You drew: {{ card_info['drawn_card'] }}</h2>
+        </div>
+        <img
+          src="{{ url_for('static', filename='images/cards/' + '_'.join(card_info['drawn_card'].lower().split()) + '.png') }}"
+          alt="{{ card_info['drawn_card'] }}"
+        />
+        <div class="card-info{% if card_info['active'] %} active{% endif %}">
+          <p>{{ card_info['unique_probability'] }}</p>
+          <p>{{ card_info['dependent_probability'] }}</p>
+          <p>{{ card_info['color_probability'] }}</p>
+          <p>{{ card_info['suit_probability'] }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <button onclick="nextCard()">Next Card</button>
+
+    <script>
+      // JavaScript function to navigate to the next card
+      let cardIndex = 0;
+      const cards = document.querySelectorAll(".card");
+
+      function nextCard() {
+        cards[cardIndex].classList.remove("active"); // Hide the currently active card
+        cardIndex++;
+        if (cardIndex >= cards.length) {
+          cardIndex = 0; // Reset to the first card if reached the end
+        }
+        cards[cardIndex].classList.add("active"); // Show the next card
+      }
+    </script>
+  </body>
+</html>
